@@ -1,7 +1,14 @@
 {
   "auth": {
     "providers": {
-      "emailPassword": true
+      "emailPassword": true,
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "One Sunnah",
+        "supportEmail": "manca.fi@gmail.com",
+        "authorizedRedirectUris": [
+          "https://one-sunnah.sandy-moose-1600.chatgpt.site"
+        ]
+      }
     }
   },
   "firestore": [

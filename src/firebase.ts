@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAnalytics, isSupported } from 'firebase/analytics';
-import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 import { getFirestore, collection, getDocs, setDoc, doc, deleteDoc, writeBatch } from 'firebase/firestore';
 import type { Entry } from './data';
 
@@ -27,10 +27,20 @@ void isSupported().then(supported => {
 
 export async function login(email: string, password: string) {
   await signInWithEmailAndPassword(auth, email, password);
-  const token = await auth.currentUser?.getIdTokenResult();
+  await requireAdministrator();
+}
+
+export async function loginWithGoogle() {
+  await signInWithPopup(auth, new GoogleAuthProvider());
+  await requireAdministrator();
+}
+
+async function requireAdministrator() {
+  const user = auth.currentUser;
+  const token = await user?.getIdTokenResult(true);
   if (token?.claims.admin !== true) {
     await signOut(auth);
-    throw Error('This account does not have administrator access.');
+    throw Error(`Sign-in succeeded, but this account does not have administrator access. UID: ${user?.uid ?? 'unavailable'}`);
   }
 }
 

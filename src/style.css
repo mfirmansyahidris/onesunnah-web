@@ -8,3 +8,5 @@
 .import-label{display:block;margin-top:18px;font-size:12px;color:var(--green)}
 .import-label input{display:block;width:100%;margin-top:9px;padding:10px;border:1px solid var(--line);border-radius:6px;background:#fff}
 .widget[dir="rtl"] .widget-top span{direction:ltr;unicode-bidi:isolate}
+
+.signin-options{margin-top:24px}.signin-options form{margin-top:20px}.google-signin{width:100%;min-height:45px;border:1px solid #d6ded4;border-radius:7px;background:#fff;color:#253c33;font-weight:600;transition:background .2s,border-color .2s}.google-signin:hover:not(:disabled){background:#f5f8f3;border-color:#9cad9f}.signin-divider{display:flex;align-items:center;gap:12px;margin:19px 0 0;color:#89948c;font-size:11px}.signin-divider:before,.signin-divider:after{content:"";height:1px;flex:1;background:var(--line)}.auth-error{margin-top:16px!important;overflow-wrap:anywhere}
