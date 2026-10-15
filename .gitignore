@@ -5,3 +5,4 @@ dist/
 *.tsbuildinfo
 graphify-out/
 .cache/
+firestore-debug.log

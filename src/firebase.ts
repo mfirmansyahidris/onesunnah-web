@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAnalytics, isSupported } from 'firebase/analytics';
-import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
-import { getFirestore, collection, getDocs, setDoc, doc, deleteDoc, writeBatch } from 'firebase/firestore';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getFirestore, collection, getDoc, getDocs, setDoc, doc, deleteDoc, writeBatch, serverTimestamp } from 'firebase/firestore';
 import type { Entry } from './data';
 
 const env = (import.meta as unknown as { env: Record<string, string | undefined> }).env;
@@ -25,23 +25,43 @@ void isSupported().then(supported => {
   if (supported) getAnalytics(app);
 }).catch(() => {});
 
-export async function login(email: string, password: string) {
-  await signInWithEmailAndPassword(auth, email, password);
-  await requireAdministrator();
-}
+export type AccessState = {
+  status: 'signed_out' | 'not_requested' | 'pending' | 'rejected' | 'approved';
+  uid?: string;
+  email?: string;
+  displayName?: string;
+};
 
-export async function loginWithGoogle() {
+export async function loginWithGoogle(): Promise<AccessState> {
   await signInWithPopup(auth, new GoogleAuthProvider());
-  await requireAdministrator();
+  return checkAccess();
 }
 
-async function requireAdministrator() {
+export async function checkAccess(): Promise<AccessState> {
   const user = auth.currentUser;
-  const token = await user?.getIdTokenResult(true);
-  if (token?.claims.admin !== true) {
-    await signOut(auth);
-    throw Error(`Sign-in succeeded, but this account does not have administrator access. UID: ${user?.uid ?? 'unavailable'}`);
-  }
+  if (!user) return { status: 'signed_out' };
+  const identity = { uid: user.uid, email: user.email ?? '', displayName: user.displayName ?? '' };
+  const token = await user.getIdTokenResult(true);
+  if (token.signInProvider !== 'google.com') throw Error('Please sign in with a Google account to request access.');
+  const request = await getDoc(doc(db, 'accessRequests', user.uid));
+  if (!request.exists()) return { ...identity, status: 'not_requested' };
+  const status = request.data().status;
+  return { ...identity, status: status === 'approved' ? 'approved' : status === 'rejected' ? 'rejected' : 'pending' };
+}
+
+export async function requestAccess(): Promise<AccessState> {
+  const user = auth.currentUser;
+  if (!user) throw Error('Sign in with Google before requesting access.');
+  const token = await user.getIdTokenResult(true);
+  if (token.signInProvider !== 'google.com') throw Error('Google sign-in is required.');
+  await setDoc(doc(db, 'accessRequests', user.uid), {
+    uid: user.uid,
+    email: user.email ?? '',
+    displayName: user.displayName ?? '',
+    status: 'pending',
+    requestedAt: serverTimestamp(),
+  });
+  return checkAccess();
 }
 
 export async function fetchEntries() {

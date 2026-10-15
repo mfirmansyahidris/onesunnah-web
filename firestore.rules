@@ -1,7 +1,27 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function admin() { return request.auth != null && request.auth.token.admin == true; }
+    function admin() {
+      return request.auth != null
+        && request.auth.token.firebase.sign_in_provider == 'google.com'
+        && exists(/databases/$(database)/documents/accessRequests/$(request.auth.uid))
+        && get(/databases/$(database)/documents/accessRequests/$(request.auth.uid)).data.status == 'approved';
+    }
+    match /accessRequests/{uid} {
+      allow get: if request.auth != null && request.auth.uid == uid;
+      allow list: if false;
+      allow create: if request.auth != null
+        && request.auth.uid == uid
+        && request.auth.token.firebase.sign_in_provider == 'google.com'
+        && request.resource.data.keys().hasAll(['uid', 'email', 'displayName', 'status', 'requestedAt'])
+        && request.resource.data.keys().hasOnly(['uid', 'email', 'displayName', 'status', 'requestedAt'])
+        && request.resource.data.uid == uid
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.displayName is string
+        && request.resource.data.status == 'pending'
+        && request.resource.data.requestedAt == request.time;
+      allow update, delete: if false;
+    }
     match /hadiths/{id} {
       allow get, list: if admin() || (resource.data.status == 'Published' && resource.data.reviewed == true);
       allow create, update, delete: if admin();
