@@ -1,1 +1,14 @@
-{"firestore":[{"database":"(default)","rules":"firestore.rules","indexes":"firestore.indexes.json"}]}
+{
+  "auth": {
+    "providers": {
+      "emailPassword": true
+    }
+  },
+  "firestore": [
+    {
+      "database": "(default)",
+      "rules": "firestore.rules",
+      "indexes": "firestore.indexes.json"
+    }
+  ]
+}
