@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { getFirestore, collection, getDoc, getDocs, setDoc, doc, deleteDoc, writeBatch, serverTimestamp } from 'firebase/firestore';
+import { getFirestore, collection, getDoc, getDocs, setDoc, doc, deleteDoc, writeBatch, serverTimestamp, query, where, limit } from 'firebase/firestore';
 import type { Entry } from './data';
 
 const env = (import.meta as unknown as { env: Record<string, string | undefined> }).env;
@@ -66,6 +66,11 @@ export async function requestAccess(): Promise<AccessState> {
 
 export async function fetchEntries() {
   const snap = await getDocs(collection(db, 'hadiths'));
+  return snap.docs.map(d => ({ ...d.data(), id: d.id }) as Entry);
+}
+
+export async function fetchPublishedEntries(): Promise<Entry[]> {
+  const snap = await getDocs(query(collection(db, 'hadiths'), where('status', '==', 'Published'), where('reviewed', '==', true), limit(100)));
   return snap.docs.map(d => ({ ...d.data(), id: d.id }) as Entry);
 }
 

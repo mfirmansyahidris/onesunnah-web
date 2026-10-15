@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { initializeTestEnvironment, assertFails, assertSucceeds } from '@firebase/rules-unit-testing';
-import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, getDocs, collection, query, where, limit, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 
 const environment = await initializeTestEnvironment({
   projectId: 'demo-one-sunnah',
@@ -31,6 +31,10 @@ try {
 
   await assertFails(getDoc(doc(guest, 'hadiths', 'draft')));
   await assertSucceeds(getDoc(doc(guest, 'hadiths', 'published')));
+  await assertFails(getDocs(collection(guest, 'hadiths')));
+  await assertFails(getDocs(query(collection(guest, 'hadiths'), where('status', '==', 'Published'))));
+  const publicReading = await assertSucceeds(getDocs(query(collection(guest, 'hadiths'), where('status', '==', 'Published'), where('reviewed', '==', true), limit(100))));
+  assert.deepEqual(publicReading.docs.map(record => record.id), ['published']);
   await assertFails(getDoc(doc(alice, 'hadiths', 'draft')));
   await assertFails(getDoc(doc(bob, 'hadiths', 'draft')));
   await assertFails(setDoc(doc(passwordUser, 'accessRequests', 'password-user'), {
