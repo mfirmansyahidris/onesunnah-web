@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { initializeFirestore, collection, getDocs, setDoc, doc, deleteDoc, writeBatch } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, setDoc, doc, deleteDoc, writeBatch } from 'firebase/firestore';
 import type { Entry } from './data';
 
 const env = (import.meta as unknown as { env: Record<string, string | undefined> }).env;
@@ -16,10 +16,10 @@ const firebaseConfig = {
 };
 
 export const configured = true;
-export const firestoreDatabaseId = 'onesunnah';
+export const firestoreDatabaseId = '(default)';
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-const db = initializeFirestore(app, {}, firestoreDatabaseId);
+const db = getFirestore(app);
 
 void isSupported().then(supported => {
   if (supported) getAnalytics(app);
