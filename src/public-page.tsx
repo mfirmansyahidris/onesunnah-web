@@ -1,9 +1,10 @@
 import {useEffect, useState} from 'react';
-import {ArrowLeft, ArrowUpRight, BookOpen, Check, ChevronDown, CircleAlert, Feather, Globe2, LoaderCircle} from 'lucide-react';
+import {ArrowLeft, ArrowUpRight, BookOpen, Check, CircleAlert, Feather, LoaderCircle} from 'lucide-react';
 import {GoogleMark, Logo} from './brand';
 import {isRtl, languages, referenceFor, type Entry, type Lang} from './data';
 import {fetchPublishedEntries, type AccessState} from './firebase';
 import featuredReading from './featured-reading.json';
+import {LanguageSelector} from './language-selector';
 import './public-page.css';
 
 type Reading = Pick<Entry, 'id'|'arabic'|'texts'|'explanations'|'source'|'url'|'references'|'provenance'>;
@@ -45,7 +46,7 @@ export function ReadingPage({onLogin, busy, checking, approved}: {onLogin:()=>vo
     <header className="reading-header">
       <Logo/>
       <div className="reading-header-actions">
-        <label className="reading-language"><Globe2 size={15}/><span className="reading-sr-only">Reading language</span><select aria-label="Reading language" value={language} onChange={e=>selectLanguage(e.target.value as Lang)}>{languages.map(l=><option value={l.code} key={l.code}>{l.native}</option>)}</select><ChevronDown size={12}/></label>
+        <LanguageSelector language={language} onChange={selectLanguage}/>
         <button className="reading-google" aria-label={approved?text.studio:text.login} title={approved?text.studio:text.login} disabled={busy||checking} onClick={onLogin}>{busy||checking?<LoaderCircle size={19} className="reading-spinner"/>:<GoogleMark/>}</button>
       </div>
     </header>
