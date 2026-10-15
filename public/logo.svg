@@ -1,1 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 82"><path fill="#173f35" d="M8 6Q28 5 48 23L37 31V42L46 39V76Q26 65 8 65Q4 65 4 60V11Q4 6 8 6ZM55 24Q76 5 92 6Q96 6 96 11V60Q96 65 92 65Q73 65 58 76V22Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="One Sunnah">
+  <path d="M17 58V43C17 27 30 16 50 6C70 16 83 27 83 43V58" fill="none" stroke="#173f35" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path fill="#b99859" d="m50 26 3 7 7-3-3 7 7 3-7 3 3 7-7-3-3 7-3-7-7 3 3-7-7-3 7-3-3-7 7 3z"/>
+  <path fill="#173f35" d="M9 54c14-2 27 1 36 10v27C34 84 22 81 9 82c-2 0-3-2-3-4V59c0-3 1-5 3-5Zm82 0c-14-2-27 1-36 10v27c11-7 23-10 36-9 2 0 3-2 3-4V59c0-3-1-5-3-5Z"/>
+  <path d="M50 65v29" fill="none" stroke="#b99859" stroke-width="3" stroke-linecap="round"/>
+</svg>
