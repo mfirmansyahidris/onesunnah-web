@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { initializeFirestore, collection, getDocs, setDoc, doc, deleteDoc } from 'firebase/firestore';
+import { initializeFirestore, collection, getDocs, setDoc, doc, deleteDoc, writeBatch } from 'firebase/firestore';
 import type { Entry } from './data';
 
 const env = (import.meta as unknown as { env: Record<string, string | undefined> }).env;
@@ -45,4 +45,14 @@ export async function writeEntry(entry: Entry) {
 
 export async function removeEntry(id: string) {
   await deleteDoc(doc(db, 'hadiths', id));
+}
+
+export async function importEntries(entries: Entry[]) {
+  for (let start = 0; start < entries.length; start += 400) {
+    const batch = writeBatch(db);
+    for (const entry of entries.slice(start, start + 400)) {
+      batch.set(doc(db, 'hadiths', entry.id), entry);
+    }
+    await batch.commit();
+  }
 }
