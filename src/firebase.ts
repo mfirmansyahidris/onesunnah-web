@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { getFirestore, collection, getDoc, getDocs, setDoc, doc, deleteDoc, writeBatch, serverTimestamp, query, where, limit } from 'firebase/firestore';
+import { getFirestore, collection, getDoc, getDocs, setDoc, doc, deleteDoc, writeBatch, serverTimestamp, query, where, limit, onSnapshot, runTransaction } from 'firebase/firestore';
 import type { Entry } from './data';
 
 const env = (import.meta as unknown as { env: Record<string, string | undefined> }).env;
@@ -30,6 +30,7 @@ export type AccessState = {
   uid?: string;
   email?: string;
   displayName?: string;
+  role?: 'owner' | 'editor';
 };
 
 export async function loginWithGoogle(): Promise<AccessState> {
@@ -45,8 +46,49 @@ export async function checkAccess(): Promise<AccessState> {
   if (token.signInProvider !== 'google.com') throw Error('Please sign in with a Google account to request access.');
   const request = await getDoc(doc(db, 'accessRequests', user.uid));
   if (!request.exists()) return { ...identity, status: 'not_requested' };
-  const status = request.data().status;
-  return { ...identity, status: status === 'approved' ? 'approved' : status === 'rejected' ? 'rejected' : 'pending' };
+  const data = request.data();
+  const status = data.status === 'approved' ? 'approved' : data.status === 'rejected' ? 'rejected' : 'pending';
+  return { ...identity, status, ...(status === 'approved' ? { role: data.role === 'owner' ? 'owner' : 'editor' } as const : {}) };
+}
+
+export type AccessRequest = {
+  uid: string;
+  email: string;
+  displayName: string;
+  status: 'pending' | 'approved' | 'rejected';
+  role?: 'owner' | 'editor';
+  requestedAt: Date | null;
+  reviewedAt: Date | null;
+  reviewedBy?: string;
+};
+
+export function watchAccessRequests(onChange: (rows: AccessRequest[]) => void, onError: (error: Error) => void) {
+  return onSnapshot(collection(db, 'accessRequests'), snapshot => {
+    const rows = snapshot.docs.map(record => {
+      const data = record.data();
+      return {
+        uid: record.id, email: data.email || '', displayName: data.displayName || '',
+        status: data.status, role: data.role,
+        requestedAt: data.requestedAt?.toDate() ?? null,
+        reviewedAt: data.reviewedAt?.toDate() ?? null,
+        reviewedBy: data.reviewedBy,
+      } as AccessRequest;
+    });
+    onChange(rows.sort((a, b) => (b.requestedAt?.getTime() ?? 0) - (a.requestedAt?.getTime() ?? 0)));
+  }, onError);
+}
+
+export async function reviewAccessRequest(uid: string, decision: 'approved' | 'rejected') {
+  const user = auth.currentUser;
+  if (!user) throw Error('Please sign in again.');
+  const reference = doc(db, 'accessRequests', uid);
+  await runTransaction(db, async transaction => {
+    const snapshot = await transaction.get(reference);
+    if (!snapshot.exists() || snapshot.data().status !== 'pending') throw Error('This request has already been reviewed.');
+    transaction.update(reference, {
+      status: decision, role: 'editor', reviewedAt: serverTimestamp(), reviewedBy: user.uid,
+    });
+  });
 }
 
 export async function requestAccess(): Promise<AccessState> {

@@ -7,9 +7,13 @@ service cloud.firestore {
         && exists(/databases/$(database)/documents/accessRequests/$(request.auth.uid))
         && get(/databases/$(database)/documents/accessRequests/$(request.auth.uid)).data.status == 'approved';
     }
+    function owner() {
+      return admin()
+        && get(/databases/$(database)/documents/accessRequests/$(request.auth.uid)).data.get('role', 'editor') == 'owner';
+    }
     match /accessRequests/{uid} {
-      allow get: if request.auth != null && request.auth.uid == uid;
-      allow list: if false;
+      allow get: if (request.auth != null && request.auth.uid == uid) || owner();
+      allow list: if owner();
       allow create: if request.auth != null
         && request.auth.uid == uid
         && request.auth.token.firebase.sign_in_provider == 'google.com'
@@ -20,7 +24,16 @@ service cloud.firestore {
         && request.resource.data.displayName is string
         && request.resource.data.status == 'pending'
         && request.resource.data.requestedAt == request.time;
-      allow update, delete: if false;
+      allow update: if owner()
+        && request.auth.uid != uid
+        && resource.data.status == 'pending'
+        && resource.data.get('role', 'editor') != 'owner'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'role', 'reviewedAt', 'reviewedBy'])
+        && request.resource.data.status in ['approved', 'rejected']
+        && request.resource.data.role == 'editor'
+        && request.resource.data.reviewedBy == request.auth.uid
+        && request.resource.data.reviewedAt == request.time;
+      allow delete: if false;
     }
     match /hadiths/{id} {
       allow get, list: if admin() || (resource.data.status == 'Published' && resource.data.reviewed == true);

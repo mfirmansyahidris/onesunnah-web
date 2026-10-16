@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
-import {ArrowLeft, ArrowUpRight, BookOpen, Check, CircleAlert, Feather, LoaderCircle} from 'lucide-react';
-import {GoogleMark, Logo} from './brand';
+import {ArrowLeft, ArrowUpRight, BookOpen, Check, CircleAlert, Feather, LoaderCircle, LogIn, UserRound} from 'lucide-react';
+import {Logo} from './brand';
 import {isRtl, languages, referenceFor, type Entry, type Lang} from './data';
 import {fetchPublishedEntries, type AccessState} from './firebase';
 import featuredReading from './featured-reading.json';
@@ -10,18 +10,18 @@ import './public-page.css';
 type Reading = Pick<Entry, 'id'|'arabic'|'texts'|'explanations'|'source'|'url'|'references'|'provenance'>;
 
 const copy = {
-  en: {eyebrow:'A DAILY MOMENT OF REFLECTION', title:'A little goodness,', titleEnd:'every day.', subtitle:'One hadith to read, reflect on, and carry with you.', today:'TODAY’S HADITH', original:'THE ORIGINAL WORDS', translation:'Translation', explanation:'Understanding the hadith', sharh:'EXPLANATION · SHARH', source:'Read the source', credit:'Translation & explanation', footer:'Learn a hadith. Live a sunnah.', login:'Sign in with Google', studio:'Open content studio'},
-  id: {eyebrow:'SEJENAK UNTUK MERENUNG', title:'Sedikit kebaikan,', titleEnd:'setiap hari.', subtitle:'Satu hadis untuk dibaca, direnungkan, dan diamalkan.', today:'HADIS HARI INI', original:'TEKS ASLI', translation:'Terjemahan', explanation:'Memahami makna hadis', sharh:'PENJELASAN · SYARAH', source:'Baca sumber', credit:'Terjemahan & penjelasan', footer:'Pelajari hadis. Hidupkan sunnah.', login:'Masuk dengan Google', studio:'Buka studio konten'},
-  ms: {eyebrow:'SEJENAK UNTUK MERENUNG', title:'Sedikit kebaikan,', titleEnd:'setiap hari.', subtitle:'Satu hadis untuk dibaca, direnungkan, dan diamalkan.', today:'HADIS HARI INI', original:'TEKS ASAL', translation:'Terjemahan', explanation:'Memahami makna hadis', sharh:'PENJELASAN · SYARAH', source:'Baca sumber', credit:'Terjemahan & penjelasan', footer:'Pelajari hadis. Hidupkan sunnah.', login:'Log masuk dengan Google', studio:'Buka studio kandungan'},
-  ar: {eyebrow:'لحظة للتأمل كل يوم', title:'قليل من الخير،', titleEnd:'كل يوم.', subtitle:'حديث تقرؤه وتتأمله وتعمل به.', today:'حديث اليوم', original:'نص الحديث', translation:'الترجمة', explanation:'فهم معنى الحديث', sharh:'شرح الحديث', source:'اقرأ المصدر', credit:'النص والشرح', footer:'تعلّم حديثًا. وأحيِ سُنّة.', login:'تسجيل الدخول باستخدام Google', studio:'افتح استوديو المحتوى'},
-  ur: {eyebrow:'ہر روز غور و فکر کا ایک لمحہ', title:'تھوڑی سی نیکی،', titleEnd:'ہر روز۔', subtitle:'ایک حدیث پڑھیں، سمجھیں اور اس پر عمل کریں۔', today:'آج کی حدیث', original:'اصل عربی متن', translation:'ترجمہ', explanation:'حدیث کا مفہوم سمجھیں', sharh:'حدیث کی تشریح', source:'ماخذ پڑھیں', credit:'ترجمہ اور تشریح', footer:'حدیث سیکھیں۔ سنت اپنائیں۔', login:'Google کے ساتھ سائن ان کریں', studio:'مواد کا اسٹوڈیو کھولیں'},
+  en: {eyebrow:'A DAILY MOMENT OF REFLECTION', title:'A little goodness,', titleEnd:'every day.', subtitle:'One hadith to read, reflect on, and carry with you.', today:'TODAY’S HADITH', original:'THE ORIGINAL WORDS', translation:'Translation', explanation:'Understanding the hadith', sharh:'EXPLANATION · SHARH', source:'Read the source', credit:'Translation & explanation', footer:'Learn a hadith. Live a sunnah.', login:'Log in', studio:'Open content studio'},
+  id: {eyebrow:'SEJENAK UNTUK MERENUNG', title:'Sedikit kebaikan,', titleEnd:'setiap hari.', subtitle:'Satu hadis untuk dibaca, direnungkan, dan diamalkan.', today:'HADIS HARI INI', original:'TEKS ASLI', translation:'Terjemahan', explanation:'Memahami makna hadis', sharh:'PENJELASAN · SYARAH', source:'Baca sumber', credit:'Terjemahan & penjelasan', footer:'Pelajari hadis. Hidupkan sunnah.', login:'Masuk', studio:'Buka studio konten'},
+  ms: {eyebrow:'SEJENAK UNTUK MERENUNG', title:'Sedikit kebaikan,', titleEnd:'setiap hari.', subtitle:'Satu hadis untuk dibaca, direnungkan, dan diamalkan.', today:'HADIS HARI INI', original:'TEKS ASAL', translation:'Terjemahan', explanation:'Memahami makna hadis', sharh:'PENJELASAN · SYARAH', source:'Baca sumber', credit:'Terjemahan & penjelasan', footer:'Pelajari hadis. Hidupkan sunnah.', login:'Log masuk', studio:'Buka studio kandungan'},
+  ar: {eyebrow:'لحظة للتأمل كل يوم', title:'قليل من الخير،', titleEnd:'كل يوم.', subtitle:'حديث تقرؤه وتتأمله وتعمل به.', today:'حديث اليوم', original:'نص الحديث', translation:'الترجمة', explanation:'فهم معنى الحديث', sharh:'شرح الحديث', source:'اقرأ المصدر', credit:'النص والشرح', footer:'تعلّم حديثًا. وأحيِ سُنّة.', login:'تسجيل الدخول', studio:'افتح استوديو المحتوى'},
+  ur: {eyebrow:'ہر روز غور و فکر کا ایک لمحہ', title:'تھوڑی سی نیکی،', titleEnd:'ہر روز۔', subtitle:'ایک حدیث پڑھیں، سمجھیں اور اس پر عمل کریں۔', today:'آج کی حدیث', original:'اصل عربی متن', translation:'ترجمہ', explanation:'حدیث کا مفہوم سمجھیں', sharh:'حدیث کی تشریح', source:'ماخذ پڑھیں', credit:'ترجمہ اور تشریح', footer:'حدیث سیکھیں۔ سنت اپنائیں۔', login:'لاگ ان کریں', studio:'مواد کا اسٹوڈیو کھولیں'},
 };
 
 function Ornament() {
   return <svg className="reading-rosette" viewBox="0 0 56 56" fill="none" aria-hidden="true"><path d="m28 3 7 13 14-3-3 15 7 0-13 7 3 14-15-3v7l-7-13-14 3 3-15H3l13-7-3-14 15 3Z"/><path d="m28 13 15 15-15 15-15-15Z"/><circle cx="28" cy="28" r="5"/></svg>;
 }
 
-function Decorations() {
+export function Decorations() {
   return <div className="reading-decoration" aria-hidden="true"><div className="reading-pattern pattern-left"/><div className="reading-pattern pattern-right"/><div className="reading-arch"/></div>;
 }
 
@@ -47,7 +47,7 @@ export function ReadingPage({onLogin, busy, checking, approved}: {onLogin:()=>vo
       <Logo/>
       <div className="reading-header-actions">
         <LanguageSelector language={language} onChange={selectLanguage}/>
-        <button className="reading-google" aria-label={approved?text.studio:text.login} title={approved?text.studio:text.login} disabled={busy||checking} onClick={onLogin}>{busy||checking?<LoaderCircle size={19} className="reading-spinner"/>:<GoogleMark/>}</button>
+        <button className="reading-google" aria-label={approved?text.studio:text.login} title={approved?text.studio:text.login} disabled={busy||checking} onClick={onLogin}>{busy||checking?<LoaderCircle size={19} className="reading-spinner"/>:approved?<UserRound size={19}/>:<LogIn size={19}/>}</button>
       </div>
     </header>
     <main className="reading-main">
