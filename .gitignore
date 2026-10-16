@@ -6,3 +6,5 @@ dist/
 graphify-out/
 .cache/
 firestore-debug.log
+firebase-debug.log
+output/
