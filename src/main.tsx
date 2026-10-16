@@ -12,6 +12,15 @@ import {OwnerAccessPage} from './owner-access-page';
 import './style.css';
 const nav=[{name:'Overview',icon:LayoutDashboard},{name:'Content library',icon:Library},{name:'Translations',icon:Languages},{name:'Widget preview',icon:PanelsTopLeft},{name:'Sources',icon:BookOpen}];
 function readLocal(){try{const x=JSON.parse(localStorage.getItem('one-sunnah-content')||'null');return Array.isArray(x)?x as Entry[]:seeds;}catch{return seeds;}}
+function accessErrorMessage(error:unknown){
+ const code=typeof error==='object'&&error!==null&&'code' in error?String(error.code):'';
+ if(code==='auth/network-request-failed'||code==='unavailable')return 'We couldn’t connect to Google sign-in. Check your connection and try again.';
+ if(code==='auth/popup-closed-by-user'||code==='auth/cancelled-popup-request')return 'Google sign-in was cancelled. You can try again when you’re ready.';
+ if(code==='auth/popup-blocked')return 'Your browser blocked the Google sign-in window. Allow pop-ups for One Sunnah and try again.';
+ if(code==='auth/unauthorized-domain')return 'Google sign-in isn’t available on this website yet. Please contact the workspace owner.';
+ if(code==='permission-denied')return 'Your workspace access may have changed. Please log in again to check your account.';
+ return error instanceof Error?error.message:'We couldn’t open your workspace. Please try again.';
+}
 function App(){
  const [entries,setEntries]=useState<Entry[]>(readLocal),[page,setPage]=useState('Overview'),[query,setQuery]=useState(''),[filter,setFilter]=useState('All content'),[editor,setEditor]=useState<Entry|null>(null),[lang,setLang]=useState<Lang>('en'),[notice,setNotice]=useState(''),[error,setError]=useState(''),[authError,setAuthError]=useState(''),[access,setAccess]=useState<AccessState>({status:'signed_out'}),[authLoading,setAuthLoading]=useState(true),[selected,setSelected]=useState('intention'),[theme,setTheme]=useState('Forest'),[cloud,setCloud]=useState(false),[busy,setBusy]=useState(false),[menu,setMenu]=useState(false),[size,setSize]=useState('4 × 3');
  const [surface,setSurface]=useState<'reader'|'login'|'access'|'studio'>('reader');
@@ -21,8 +30,8 @@ function App(){
  const workspaceNav=owner?[...nav,{name:'Access requests',icon:UsersRound}]:nav;
  const show=(s:string)=>{setNotice(s);window.setTimeout(()=>setNotice(''),4000);};
  const navigate=(p:string)=>{setPage(p);setMenu(false);setQuery('');setFilter('All content');};
- useEffect(()=>{let active=true;void auth.authStateReady().then(async()=>{const state=await checkAccess();if(active)setAccess(state);}).catch(err=>{if(active)setAuthError(err instanceof Error?err.message:String(err));}).finally(()=>{if(active)setAuthLoading(false);});return()=>{active=false;};},[]);
- const openWorkspace=async(intent:'login'|'signup')=>{if(loginInFlight.current)return;loginInFlight.current=true;setBusy(true);setAuthError('');try{const state=await resolveWorkspaceAccess({intent,signedIn:!!auth.currentUser,login:loginWithGoogle,check:checkAccess,request:requestAccess});setAccess(state);if(state.status==='approved'){const rows=await fetchEntries();setEntries(rows);setCloud(true);setPage('Overview');setMenu(false);setSurface('studio');}else{setCloud(false);setSurface(state.status==='not_requested'?'login':'access');}}catch(err){setCloud(false);setAuthError(err instanceof Error?err.message:String(err));setSurface('login');}finally{loginInFlight.current=false;setBusy(false);setAuthLoading(false);}};
+ useEffect(()=>{let active=true;void auth.authStateReady().then(async()=>{const state=await checkAccess();if(active)setAccess(state);}).catch(err=>{if(active)setAuthError(accessErrorMessage(err));}).finally(()=>{if(active)setAuthLoading(false);});return()=>{active=false;};},[]);
+ const openWorkspace=async(intent:'login'|'signup')=>{if(loginInFlight.current)return;loginInFlight.current=true;setBusy(true);setAuthError('');try{const state=await resolveWorkspaceAccess({intent,signedIn:!!auth.currentUser,login:loginWithGoogle,check:checkAccess,request:requestAccess});setAccess(state);if(state.status==='approved'){const rows=await fetchEntries();setEntries(rows);setCloud(true);setPage('Overview');setMenu(false);setSurface('studio');}else{setCloud(false);setSurface(state.status==='not_requested'?'login':'access');}}catch(err){setCloud(false);setAuthError(accessErrorMessage(err));setSurface('login');}finally{loginInFlight.current=false;setBusy(false);setAuthLoading(false);}};
  const showLogin=()=>{setLoginMode('login');setAuthError('');setSurface('login');};
  const switchAccount=async()=>{try{await signOut(auth);setAccess({status:'signed_out'});setCloud(false);setEntries(readLocal());setAuthError('');}catch{setAuthError('Unable to switch accounts. Please try again.');}};
  const disconnect=async()=>{await signOut(auth);setSurface('reader');setCloud(false);setAccess({status:'signed_out'});setEntries(readLocal());setAuthError('');};

@@ -34,7 +34,7 @@ export function LoginPage({mode, access, error, busy, onMode, onSubmit, onBack, 
           {busy?<LoaderCircle size={20} className="reading-spinner"/>:approved?<ArrowRight size={20}/>:<GoogleMark/>}
           {busy?'Please wait…':approved?'Open workspace':signup?'Sign up with Google':access.email?'Check workspace access':'Log in with Google'}
         </button>
-        <div className="login-switch"><span>{signup?'Already have access?':'New to the studio?'}</span><button onClick={()=>onMode(signup?'login':'signup')} disabled={busy}>{signup?'Log in':'Sign up'}<ArrowRight size={14}/></button></div>
+        {!approved&&<div className="login-switch"><span>{signup?'Already have access?':'New to the studio?'}</span><button onClick={()=>onMode(signup?'login':'signup')} disabled={busy}>{signup?'Log in':'Sign up'}<ArrowRight size={14}/></button></div>}
         <div className="login-trust"><ShieldCheck size={16}/><p>{signup?'Your Google name and email are shared with the owner for approval.':'Workspace access is granted by the owner.'}</p></div>
       </section>
     </main>
