@@ -1,0 +1,31 @@
+{
+  "projectId": "onesunnah-e3a1e",
+  "databaseId": "(default)",
+  "collection": "hadiths",
+  "selected": 1000,
+  "completeFiveLanguages": 147,
+  "englishFallbackForMalay": 853,
+  "excludedFromDailyRelease": [
+    {
+      "id": "hadeethenc-3041",
+      "gradeArabic": "صحيح موقوفًا على أبي بكر الصديق -رضي الله عنه",
+      "reason": "Companion statement or mixed grading; excluded from the daily hadith release."
+    },
+    {
+      "id": "hadeethenc-3300",
+      "gradeArabic": "صحيح وهو موقوف هلى أنس بن مالك",
+      "reason": "Companion statement or mixed grading; excluded from the daily hadith release."
+    },
+    {
+      "id": "hadeethenc-10877",
+      "gradeArabic": "حديث أبي ذر ضعيف، وحديث معيقيب صحيح",
+      "reason": "Companion statement or mixed grading; excluded from the daily hadith release."
+    }
+  ],
+  "source": "HadeethEnc.com",
+  "releaseStatus": "Awaiting editorial release approval",
+  "preserveDraftsUntilApproved": true,
+  "plannedPublished": 1000,
+  "currentlyPublishedByThisPlan": 0,
+  "scholarlyReviewPerformed": false
+}

@@ -1,0 +1,12 @@
+{
+  "documents": 1000,
+  "statuses": {
+    "Draft": 1000
+  },
+  "reviewed": 0,
+  "newDraftsMatchSourceCandidates": 900,
+  "originalRecordsUnchanged": 100,
+  "completeFiveLanguages": 147,
+  "missingMalay": 853,
+  "publicationPending": true
+}
