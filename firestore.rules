@@ -1,22 +1,25 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function admin() {
+    function googleUser() {
       return request.auth != null
-        && request.auth.token.firebase.sign_in_provider == 'google.com'
+        && request.auth.token.firebase.sign_in_provider == 'google.com';
+    }
+    function approvedUser() {
+      return googleUser()
         && exists(/databases/$(database)/documents/accessRequests/$(request.auth.uid))
         && get(/databases/$(database)/documents/accessRequests/$(request.auth.uid)).data.status == 'approved';
     }
     function owner() {
-      return admin()
+      return approvedUser()
         && get(/databases/$(database)/documents/accessRequests/$(request.auth.uid)).data.get('role', 'editor') == 'owner';
     }
     match /accessRequests/{uid} {
-      allow get: if (request.auth != null && request.auth.uid == uid) || owner();
+      // Applicants may only read and submit their own access request.
+      allow get: if (googleUser() && request.auth.uid == uid) || owner();
       allow list: if owner();
-      allow create: if request.auth != null
+      allow create: if googleUser()
         && request.auth.uid == uid
-        && request.auth.token.firebase.sign_in_provider == 'google.com'
         && request.resource.data.keys().hasAll(['uid', 'email', 'displayName', 'status', 'requestedAt'])
         && request.resource.data.keys().hasOnly(['uid', 'email', 'displayName', 'status', 'requestedAt'])
         && request.resource.data.uid == uid
@@ -36,8 +39,13 @@ service cloud.firestore {
       allow delete: if false;
     }
     match /hadiths/{id} {
-      allow get, list: if admin() || (resource.data.status == 'Published' && resource.data.reviewed == true);
-      allow create, update, delete: if admin();
+      // Android and the public reader need no login for released content.
+      allow read: if approvedUser()
+        || (resource.data.status == 'Published' && resource.data.reviewed == true);
+      allow write: if approvedUser();
+    }
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
