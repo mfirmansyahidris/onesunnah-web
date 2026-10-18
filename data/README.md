@@ -1,5 +1,12 @@
 # Five-language hadith candidates
 
+A [100-hadith daily-life release shortlist](releases/vocalized-starter-v1/README.md)
+was prepared on 2026-10-18 after reviewing vocalized Arabic matns and the
+published English/Indonesian translations. All 100 also have Urdu; 21 have
+Malay. The package preserves source records unchanged and identifies 26
+inspected Riyadh cross-references. This editorial selection has not changed
+the live 1,000-record rotation or Firestore publication state.
+
 An expanded [1,000-candidate research catalog](collection-1000/README.md) was prepared on 2026-10-16 from freshly downloaded official releases. It contains 1,000 Arabic/English/Indonesian/Urdu candidates, of which only 147 have Malay source translations. The remaining 853 are explicitly incomplete; the 1,000 × five-language target is not met. The complete subset, missing-translation queue, raw source records, coverage report, and source hashes are kept separately. The original shortlist file was not overwritten. A subsequent [Android daily release selection](android-daily-1000/README.md) replaces three unsuitable daily candidates and has now been staged in Firestore: 900 new drafts plus the original 100 unchanged documents, initially all Draft and unreviewed. After the user requested loading the source collection with English fallback, all 1,000 were approved for distribution and published on 2026-10-16. The fresh public-read audit is in `android-daily-1000/firestore-release-result.json`; no language structure migration was performed.
 
 The public reading page has a separate bundled reference in `src/featured-reading.json`: HadeethEnc 4717, with full unchanged Arabic, five translations, and five explanations extracted from these official releases. `tools/build_featured_reading.py` regenerates it without changing the 100 draft records. Attribution, release versions, and source transcripts are retained. The page prefers Firestore records only when they are published, reviewed, and contain sourced English text and explanation; otherwise it shows this attributed reference. The editor now includes a per-language explanation field.

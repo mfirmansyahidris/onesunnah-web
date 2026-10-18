@@ -1,0 +1,40 @@
+{
+  "count": 100,
+  "sourceIntegrityPassed": true,
+  "availableTextsAndExplanations": {
+    "en": 100,
+    "id": 100,
+    "ms": 21,
+    "ar": 100,
+    "ur": 100
+  },
+  "sourceGrades": {
+    "صحيح": 94,
+    "قال النووي: حديث حسن": 3,
+    "حسن": 3
+  },
+  "themes": {
+    "Keluarga, tetangga dan kepedulian": 19,
+    "Sabar, ikhlas dan kebiasaan baik": 14,
+    "Akhlak dan menjaga lisan": 19,
+    "Al-Quran dalam rutinitas": 6,
+    "Kebersihan dan adab diri": 7,
+    "Kejujuran, pekerjaan dan muamalah": 4,
+    "Makan dan bersyukur": 5,
+    "Doa dan zikir": 15,
+    "Ibadah dalam rutinitas": 11
+  },
+  "riyadhCrossReferencesReviewed": 26,
+  "sourceOnlyEditorialReviews": 74,
+  "uniqueMatns": 100,
+  "deferred": 11,
+  "snapshotSha256": "966831e87c77143df8b8b58afc173625e82cffc169f93d48391951cf12148634",
+  "writesToFirestore": 0,
+  "deletionsFromFirestore": 0,
+  "limitations": [
+    "Offline source comparison; does not re-read current Firestore or source websites.",
+    "Vocalization and daily suitability are editorial reviews, not certified by this program.",
+    "Narrator introductions and isnad are not certified fully vocalized.",
+    "Source grades are retained; no new scholarly authentication was performed."
+  ]
+}
