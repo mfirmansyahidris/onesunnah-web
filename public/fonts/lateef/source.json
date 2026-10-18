@@ -1,0 +1,24 @@
+{
+  "family": "Lateef",
+  "source": "https://software.sil.org/lateef/",
+  "distribution": "Google Fonts",
+  "revision": "e2332cf862ac3145c0ee5f24f04f4c1819b2410b",
+  "license": "SIL Open Font License 1.1",
+  "files": {
+    "Lateef-Regular.ttf": {
+      "url": "https://raw.githubusercontent.com/google/fonts/e2332cf862ac3145c0ee5f24f04f4c1819b2410b/ofl/lateef/Lateef-Regular.ttf",
+      "sha256": "fcbd9e0227a4d7238880defa5fd74c012d69351150709e559a8577446145c2fc",
+      "bytes": 241092
+    },
+    "Lateef-Bold.ttf": {
+      "url": "https://raw.githubusercontent.com/google/fonts/e2332cf862ac3145c0ee5f24f04f4c1819b2410b/ofl/lateef/Lateef-Bold.ttf",
+      "sha256": "eee405eeb4e81491b0b659fb40dc016765292022d74406c616f72501e160afe2",
+      "bytes": 243260
+    },
+    "OFL.txt": {
+      "url": "https://raw.githubusercontent.com/google/fonts/e2332cf862ac3145c0ee5f24f04f4c1819b2410b/ofl/lateef/OFL.txt",
+      "sha256": "63fbda065921d34b9421154fbdeba09075efa2405a5bcb32fbbcfd0aeea892c9",
+      "bytes": 4603
+    }
+  }
+}

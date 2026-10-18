@@ -30,3 +30,7 @@ The Firebase Console screenshot on 2026-10-15 confirmed the project uses the def
 https://sunnah.com/bukhari:1
 https://sunnah.com/bukhari:6018
 https://sunnah.com/muslim:2699a
+
+## Arabic reading font
+
+The web reader, Arabic explanation, editor and widget preview use bundled Lateef Regular/Bold. The original font files, full SIL Open Font License 1.1 copyright/license text and pinned download hashes are kept in `public/fonts/lateef/`. Source: [SIL Lateef](https://software.sil.org/lateef/). Urdu retains Noto Naskh Arabic. Arabic source text and harakat are displayed unchanged; switching fonts does not add missing diacritics. Android font changes are on hold while the web appearance is reviewed.
