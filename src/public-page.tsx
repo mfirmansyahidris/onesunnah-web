@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {ArrowLeft, ArrowUpRight, BookOpen, Check, CircleAlert, Feather, LoaderCircle, LogIn, UserRound} from 'lucide-react';
 import {Logo} from './brand';
-import {isRtl, languages, referenceFor, type Entry, type Lang} from './data';
+import {contentLanguage, isRtl, languages, referenceFor, type Entry, type Lang} from './data';
 import {fetchPublishedEntries, type AccessState} from './firebase';
 import featuredReading from './featured-reading.json';
 import {LanguageSelector} from './language-selector';
@@ -17,6 +17,8 @@ const copy = {
   ur: {eyebrow:'ہر روز غور و فکر کا ایک لمحہ', title:'تھوڑی سی نیکی،', titleEnd:'ہر روز۔', subtitle:'ایک حدیث پڑھیں، سمجھیں اور اس پر عمل کریں۔', today:'آج کی حدیث', original:'اصل عربی متن', translation:'ترجمہ', explanation:'حدیث کا مفہوم سمجھیں', sharh:'حدیث کی تشریح', source:'ماخذ پڑھیں', credit:'ترجمہ اور تشریح', footer:'حدیث سیکھیں۔ سنت اپنائیں۔', login:'لاگ ان کریں', studio:'مواد کا اسٹوڈیو کھولیں'},
 };
 
+const fallbackNotice:Record<Lang,string>={en:'English shown: translation unavailable.',id:'Bahasa Inggris ditampilkan: terjemahan belum tersedia.',ms:'Bahasa Inggeris dipaparkan: terjemahan belum tersedia.',ar:'يظهر النص الإنجليزي لأن الترجمة غير متوفرة.',ur:'ترجمہ دستیاب نہیں؛ انگریزی متن دکھایا جا رہا ہے۔'};
+
 function Ornament() {
   return <svg className="reading-rosette" viewBox="0 0 56 56" fill="none" aria-hidden="true"><path d="m28 3 7 13 14-3-3 15 7 0-13 7 3 14-15-3v7l-7-13-14 3 3-15H3l13-7-3-14 15 3Z"/><path d="m28 13 15 15-15 15-15-15Z"/><circle cx="28" cy="28" r="5"/></svg>;
 }
@@ -31,15 +33,16 @@ export function ReadingPage({onLogin, busy, checking, approved}: {onLogin:()=>vo
   });
   const [published,setPublished]=useState<Entry[]>([]);
   useEffect(()=>{let active=true;void fetchPublishedEntries().then(rows=>{if(active)setPublished(rows);}).catch(()=>{/* The attributed bundled reading remains available offline. */});return()=>{active=false;};},[]);
-  const available=published.filter(entry=>entry.status==='Published'&&entry.reviewed===true&&typeof entry.arabic==='string'&&entry.arabic.trim()&&languages.every(l=>typeof entry.texts?.[l.code]==='string'&&entry.texts[l.code].trim()&&typeof entry.explanations?.[l.code]==='string'&&entry.explanations[l.code]!.trim())).sort((a,b)=>a.id.localeCompare(b.id));
+  const available=published.filter(entry=>entry.status==='Published'&&entry.reviewed===true&&entry.source?.trim()&&entry.url?.startsWith('https://')&&entry.texts?.en?.trim()&&entry.explanations?.en?.trim()).sort((a,b)=>a.id.localeCompare(b.id));
   const date=new Date();
   const day=Math.floor(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate())/86400000);
   const reading:Reading=available.length?available[day%available.length]:featuredReading;
   const text=copy[language];
+  const displayedLanguage=contentLanguage(reading,language);
   const reference=referenceFor(reading,language);
   const dateLabel=new Intl.DateTimeFormat(language==='ms'?'ms-MY':language,{day:'numeric',month:'long',year:'numeric'}).format(date);
   const selectLanguage=(value:Lang)=>{setLanguage(value);try{localStorage.setItem('one-sunnah-reading-language',value);}catch{/* Preference is optional. */}};
-  const explanation=reading.explanations?.[language]||'';
+  const explanation=reading.explanations?.[displayedLanguage]||'';
 
   return <div className="reading-shell" dir={isRtl(language)?'rtl':'ltr'} lang={language}>
     <Decorations/>
@@ -55,10 +58,11 @@ export function ReadingPage({onLogin, busy, checking, approved}: {onLogin:()=>vo
       <article className="daily-reading" aria-label={text.today}>
         <div className="reading-date"><span>{text.today}</span><i/><time dateTime={date.toISOString().slice(0,10)}>{dateLabel}</time></div>
         <div className="reading-divider"><span/><Ornament/><span/></div>
-        <div className="reading-arabic" lang="ar" dir="rtl"><span className="reading-sr-only">{text.original}</span><p>{reading.arabic}</p></div>
-        {language!=='ar'&&<section className="reading-translation" aria-label={text.translation}><span className="reading-section-label">{text.translation}</span><p>{reading.texts[language]}</p></section>}
+        {reading.arabic&&<div className="reading-arabic" lang="ar" dir="rtl"><span className="reading-sr-only">{text.original}</span><p>{reading.arabic}</p></div>}
+        {displayedLanguage!=='ar'&&<section className="reading-translation" aria-label={text.translation}><span className="reading-section-label">{text.translation}</span><p lang={displayedLanguage} dir={isRtl(displayedLanguage)?'rtl':'ltr'}>{reading.texts[displayedLanguage]}</p></section>}
+        {displayedLanguage!==language&&<p className="reading-attribution" role="status">{fallbackNotice[language]}</p>}
         <a className="reading-reference" href={reference.url} target="_blank" rel="noreferrer"><BookOpen size={14}/><span>{reference.label}</span><ArrowUpRight size={13}/></a>
-        <section className="reading-explanation" aria-labelledby="explanation-heading"><div className="reading-explanation-heading"><Feather size={22}/><span className="reading-eyebrow">{text.sharh}</span><h2 id="explanation-heading">{text.explanation}</h2></div><div className="reading-explanation-text">{explanation.split(/\n+/).filter(Boolean).map((paragraph,i)=><p key={i}>{paragraph}</p>)}<a href={reference.url} target="_blank" rel="noreferrer">{text.source} <ArrowUpRight size={14}/></a></div></section>
+        <section className="reading-explanation" aria-labelledby="explanation-heading"><div className="reading-explanation-heading"><Feather size={22}/><span className="reading-eyebrow">{text.sharh}</span><h2 id="explanation-heading">{text.explanation}</h2></div><div className="reading-explanation-text" lang={displayedLanguage} dir={isRtl(displayedLanguage)?'rtl':'ltr'}>{explanation.split(/\n+/).filter(Boolean).map((paragraph,i)=><p key={i}>{paragraph}</p>)}<a href={reference.url} target="_blank" rel="noreferrer">{text.source} <ArrowUpRight size={14}/></a></div></section>
         <p className="reading-attribution">{text.credit} · <a href={reference.url} target="_blank" rel="noreferrer">{reference.publisher||reading.provenance?.publisher||'One Sunnah'}</a>{reference.version&&<> · {reference.version}</>}</p>
       </article>
     </main>

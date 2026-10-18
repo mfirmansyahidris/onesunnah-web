@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { getFirestore, collection, getDoc, getDocs, setDoc, doc, deleteDoc, writeBatch, serverTimestamp, query, where, limit, onSnapshot, runTransaction } from 'firebase/firestore';
+import { getFirestore, collection, getDoc, getDocs, setDoc, doc, deleteDoc, writeBatch, serverTimestamp, query, where, limit, orderBy, documentId, startAfter, onSnapshot, runTransaction, type QueryDocumentSnapshot } from 'firebase/firestore';
 import type { Entry } from './data';
 
 const env = (import.meta as unknown as { env: Record<string, string | undefined> }).env;
@@ -112,8 +112,17 @@ export async function fetchEntries() {
 }
 
 export async function fetchPublishedEntries(): Promise<Entry[]> {
-  const snap = await getDocs(query(collection(db, 'hadiths'), where('status', '==', 'Published'), where('reviewed', '==', true), limit(100)));
-  return snap.docs.map(d => ({ ...d.data(), id: d.id }) as Entry);
+  const entries:Entry[]=[];
+  const base=query(collection(db,'hadiths'),where('status','==','Published'),where('reviewed','==',true),orderBy(documentId()));
+  let cursor:QueryDocumentSnapshot|undefined;
+  while(entries.length<1000){
+    const pageSize=Math.min(250,1000-entries.length);
+    const page=await getDocs(query(base,...(cursor?[startAfter(cursor)]:[]),limit(pageSize)));
+    entries.push(...page.docs.map(d=>({...d.data(),id:d.id}) as Entry));
+    if(page.size<pageSize)break;
+    cursor=page.docs.at(-1);
+  }
+  return entries;
 }
 
 export async function writeEntry(entry: Entry) {
