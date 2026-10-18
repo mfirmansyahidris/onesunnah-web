@@ -23,9 +23,11 @@
     }
   ],
   "source": "HadeethEnc.com",
-  "releaseStatus": "Awaiting editorial release approval",
+  "releaseStatus": "Published after project release approval",
   "preserveDraftsUntilApproved": true,
   "plannedPublished": 1000,
-  "currentlyPublishedByThisPlan": 0,
-  "scholarlyReviewPerformed": false
+  "currentlyPublishedByThisPlan": 1000,
+  "scholarlyReviewPerformed": false,
+  "publicationApproved": true,
+  "languageStructureChanged": false
 }

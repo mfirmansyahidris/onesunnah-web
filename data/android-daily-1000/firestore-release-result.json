@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-10-18T05:39:40.874639+00:00",
+  "publicUnauthenticatedRead": true,
+  "publishedApproved": 1000,
+  "malayAvailable": 147,
+  "malayEmpty": 853,
+  "englishFallbackForMissingMalay": true,
+  "languageStructureChanged": false,
+  "scholarlyReviewPerformed": false,
+  "releaseId": "android-daily-1000-20261016",
+  "releaseApprovedAt": "2026-10-16T11:14:08.790755+00:00"
+}

@@ -1,7 +1,11 @@
 # Rencana koleksi harian Android — 1.000 hadis
 
-**Status: 1.000 dokumen sudah ada di Firestore sebagai draf. Publikasi masih
-menunggu persetujuan. Belum ada hadis dari paket ini yang dibuka untuk Android.**
+**Status: 1.000 dokumen telah diterbitkan di Firestore pada 16 Oktober 2026
+setelah persetujuan distribusi. Pemeriksaan tanpa login pada 18 Oktober 2026
+mengonfirmasi seluruhnya dapat dibaca.** Sebanyak 147 memiliki Melayu dan
+853 memakai pengganti Inggris saat Melayu dipilih. Struktur tetap satu
+dokumen hadis dengan lima kolom bahasa; kolom Melayu yang belum ada tetap
+kosong. Persetujuan ini bukan tinjauan keilmuan baru.
 
 ## Koleksi yang disiapkan
 
@@ -14,14 +18,17 @@ menunggu persetujuan. Belum ada hadis dari paket ini yang dibuka untuk Android.*
   Penggantinya diambil dari rilis resmi yang sama.
 - `release-plan.json` mencatat komposisi dan tiga pengecualian tersebut.
 - `firestore-staging-result.json` mencatat pemeriksaan setelah 900 draf baru
-  ditambahkan. Seluruh 100 dokumen lama dipertahankan.
+  ditambahkan. Seluruh 100 dokumen lama dipertahankan pada tahap tersebut.
+- `firestore-release-result.json` mencatat pemeriksaan publik terbaru setelah
+  penerbitan. Berkas `candidates.json` tetap merupakan snapshot sumber berstatus
+  draf, bukan salinan status produksi terkini.
 
 Semua teks, penjelasan, tautan, dan checksum rilis telah dicocokkan dengan lima
 spreadsheet resmi. Tidak dilakukan penulisan ulang, pembuatan terjemahan, atau
 klaim tinjauan ulang oleh ahli hadis. Atribusi dan versi penerbit tetap ada di
 setiap rekaman. Rincian sumber ada di `../collection-1000/SOURCES.md`.
 
-## Perilaku Android 0.6.0
+## Perilaku Android 0.6.1
 
 Koleksi luring menampung 1.000 hadis. Setiap perangkat mempunyai benih acak
 yang tersimpan. Urutan hadis diacak sekali dari benih tersebut dan tanggal

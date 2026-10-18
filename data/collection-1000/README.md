@@ -63,21 +63,26 @@ penggunaannya juga harus dicatat dari layanan tersebut.
 
 Laporan dalam paket ini adalah snapshot saat pengumpulan awal, sebelum
 penyiapan rilis Android. Pada tahap lanjutan, [pilihan harian Android](../android-daily-1000/README.md)
-dengan tiga kandidat pengganti sudah disiapkan di Firestore: 900 draf baru dan
-100 dokumen lama yang dipertahankan. Seluruh 1.000 dokumen masih draf dan
-belum diterbitkan. Nilai `uploadedToFirestore: false` dalam `coverage.json`
-mencatat keadaan saat kolektor awal berjalan, bukan status produksi terbaru.
+dengan tiga kandidat pengganti disiapkan di Firestore sebagai 900 draf baru dan
+100 dokumen lama yang dipertahankan. Setelah persetujuan pengguna pada
+16 Oktober 2026, seluruh 1.000 pilihan harian diterbitkan. Pemeriksaan publik
+pada 18 Oktober tercatat di [hasil rilis](../android-daily-1000/firestore-release-result.json).
+Nilai `uploadedToFirestore: false` dalam `coverage.json` mencatat keadaan saat
+kolektor awal berjalan, bukan status produksi terbaru.
 
 Tidak ada rekaman dalam paket penelitian ini yang diterbitkan otomatis.
-Semua rekaman menggunakan `status: Draft` dan `reviewed: false`. Berkas
-`candidates.json` berisi draf yang belum selesai dan **bukan** 1.000 hadis
-siap terbit. Validasi aplikasi menolak publikasi ketika satu bahasa kosong.
+Semua rekaman lokal menggunakan `status: Draft` dan `reviewed: false`. Berkas
+`candidates.json` adalah snapshot penelitian, bukan status rilis produksi.
+Validasi web kini memerlukan teks Inggris, rujukan HTTPS, dan persetujuan
+publikasi; bahasa lain boleh kosong. Tampilan menggunakan Inggris ketika
+terjemahan yang dipilih belum tersedia, tanpa mengisi kolom sumber yang kosong.
 Impor web yang menimpa ID lama dapat menghapus hasil tinjauan editor; jangan
 menggunakannya untuk memperbarui 100 rekaman lama tanpa membandingkan perubahan.
 
-Android tetap menyimpan paling banyak 100 hadis yang telah ditinjau dan
-diterbitkan. Target perpustakaan Firestore sebanyak 1.000 tidak mengubah
-batas penyimpanan luring Android.
+Android 0.6.1 menyimpan paling banyak 1.000 hadis yang telah disetujui untuk
+publikasi. Pengambilan dan penyimpanan luring seluruh 1.000 rekaman dari
+Firestore telah diperiksa di emulator. Persetujuan distribusi tidak berarti
+telah dilakukan tinjauan keilmuan baru atas terjemahan.
 
 ## Membangun ulang
 

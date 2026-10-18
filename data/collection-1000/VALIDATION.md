@@ -1,5 +1,12 @@
 # Hasil pemeriksaan — 16 Oktober 2026
 
+Catatan ini merekam pemeriksaan awal, sebelum persetujuan rilis dan perubahan
+validasi web. Status produksi terbaru: 1.000 pilihan harian telah diterbitkan,
+147 memiliki Melayu dan 853 memakai pengganti Inggris. Lihat
+[pemeriksaan publik 18 Oktober](../android-daily-1000/firestore-release-result.json).
+Berkas kandidat penelitian tetap berstatus draf; pemeriksaan awal di bawah
+tidak menggambarkan status dokumen Firestore saat ini.
+
 **Target 1.000 hadis lengkap dalam lima bahasa belum tercapai.** Koleksi ini
 berisi 1.000 kandidat; 147 lengkap dan 853 belum memiliki teks serta penjelasan
 Melayu. Lengkap secara struktur tidak berarti sudah lolos tinjauan keilmuan.
