@@ -1,0 +1,35 @@
+{
+  "id": "riyadh-134-preview",
+  "arabic": "«كُلُّ مَعْرُوفٍ صَدَقَةٌ».",
+  "texts": {
+    "en": "Every act of goodness is charity.",
+    "id": "Setiap kebaikan itu adalah sedekah.",
+    "ms": "",
+    "ar": "«كُلُّ مَعْرُوفٍ صَدَقَةٌ».",
+    "ur": ""
+  },
+  "explanations": {},
+  "source": "Riyadus Salihin 134 · al-Bukhari",
+  "url": "https://riyadh.islamenc.com/en/page/17",
+  "references": {
+    "en": {
+      "label": "Riyadus Salihin 134 · al-Bukhari",
+      "url": "https://riyadh.islamenc.com/en/page/17",
+      "publisher": "Riyadh IslamEnc"
+    },
+    "id": {
+      "label": "Riyadus Salihin 134 · HR. al-Bukhari",
+      "url": "https://riyadh.islamenc.com/id/page/17",
+      "publisher": "Riyadh IslamEnc"
+    },
+    "ar": {
+      "label": "رياض الصالحين ١٣٤ · رواه البخاري",
+      "url": "https://riyadh.islamenc.com/ar/page/17",
+      "publisher": "Riyadh IslamEnc"
+    }
+  },
+  "provenance": {
+    "publisher": "Riyadh IslamEnc",
+    "sourceId": "Riyadus Salihin 134, chapter 13, item 18"
+  }
+}

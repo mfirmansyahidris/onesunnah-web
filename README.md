@@ -34,3 +34,7 @@ https://sunnah.com/muslim:2699a
 ## Arabic reading font
 
 The web reader, Arabic explanation, editor and widget preview use bundled Lateef Regular/Bold. The original font files, full SIL Open Font License 1.1 copyright/license text and pinned download hashes are kept in `public/fonts/lateef/`. Source: [SIL Lateef](https://software.sil.org/lateef/). Urdu retains Noto Naskh Arabic. Arabic source text and harakat are displayed unchanged; switching fonts does not add missing diacritics. Android font changes are on hold while the web appearance is reviewed.
+
+## Riyadh IslamEnc reading preview
+
+Open `/?preview=riyadh-134&lang=id` for the attributed example from Riyadus Salihin 134, or use `lang=en`. It displays the complete short matn and its published English/Indonesian translations from [chapter 13](https://riyadh.islamenc.com/id/page/17?transes=en). Only the matn is quoted; the narrator/source information stays in the reference. Malay and Urdu stay empty and show the labeled English fallback. The sample is bundled separately from Firestore, skips the daily fetch, and is never imported or selected by the normal daily rotation. The preview is labeled, links back to today's reading, and does not invent an explanation when none is bundled. Arabic harakat are copied from the published source.
