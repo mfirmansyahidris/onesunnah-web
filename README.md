@@ -4,8 +4,36 @@ React 19 + TypeScript + Vite. A public daily hadith reading page with Arabic, fi
 ## Run
 `npm install` then `npm run dev`. Production: `npm run build`.
 
-## Demo data
-The [100-record five-language draft shortlist](data/README.md) was imported into Cloud Firestore on 2026-10-15. The source shortlist remains a draft snapshot. A 1,000-record selection was subsequently approved for distribution and published from official HadeethEnc releases. The mobile client keeps up to 1,000 records offline; 147 have Malay translations and 853 retain an empty Malay field with explicit English fallback. Older local editorial examples may remain in a browser's localStorage, but the web editor is now hidden until Google access is approved.
+## GitHub Pages
+
+The website is deployed to [One Sunnah on GitHub Pages](https://mfirmansyahidris.github.io/onesunnah-web/).
+The workflow in `.github/workflows/pages.yml` runs the access/content checks,
+builds the app, and publishes `dist` whenever `main` is pushed. It can also be
+started manually from the repository's Actions tab. Pages uses **GitHub Actions**
+as its publishing source.
+
+The build receives the base path from GitHub Pages, so logos, fonts, backgrounds,
+and the reading-preview Back link remain inside the repository URL. To verify
+that build locally, run `npm run build -- --base=/onesunnah-web/`. Ordinary
+`npm run build` retains the root path used by local previews and existing hosting.
+The GitHub Pages hostname is authorized in Firebase Authentication. The public
+Firebase client configuration is bundled; no Firebase administrator credentials
+or GitHub personal access token are required by the workflow.
+
+## Content and daily rotation
+
+As of 2026-10-20, Firestore serves the [100 curated daily-life readings](data/releases/vocalized-starter-v1/README.md).
+The other 900 records remain stored with `status: In review` and `reviewed: false`.
+All 100 active records have Arabic, English, Indonesian, and Urdu text/explanation;
+21 also have Malay. Missing Malay remains empty and uses the labeled English
+fallback. The five-language document structure is unchanged. These publication
+settings were verified through both privileged and unauthenticated reads.
+
+The original [100-record five-language draft shortlist](data/README.md) and later
+1,000-record source selection remain historical source snapshots. The mobile
+client can keep up to 1,000 published records offline and adopts the active
+selection on its next successful sync. Older local editorial examples may remain
+in a browser's localStorage, but the web editor is hidden until Google access is approved.
 
 ## Firebase
 The public Firebase Web configuration for `onesunnah-e3a1e` is included in the client. `.env.local` can override it for a different project. The Firestore Database ID is `(default)`, and content uses its `hadiths` collection. Firebase Analytics initializes when the browser supports it.

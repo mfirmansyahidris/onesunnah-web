@@ -1,4 +1,4 @@
-export const logoSrc = '/one-sunnah-logo.png';
+export const logoSrc = `${import.meta.env.BASE_URL}one-sunnah-logo.png`;
 
 export function Logo({ studio = false }: { studio?: boolean }) {
   return <div className="brand"><img src={logoSrc} width="44" height="44" alt=""/><div><strong>One <span>Sunnah</span></strong><small>{studio ? 'CONTENT STUDIO' : 'DAILY HADITH & SUNNAH'}</small></div></div>;

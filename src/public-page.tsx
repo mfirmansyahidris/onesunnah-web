@@ -59,7 +59,7 @@ export function ReadingPage({onLogin, busy, checking, approved}: {onLogin:()=>vo
       </div>
     </header>
     <main className="reading-main">
-      {preview&&<aside className="reading-preview-note"><span>{previewCopy[language].label} · Riyadh IslamEnc</span><a href="/">{previewCopy[language].back} <ArrowUpRight size={12}/></a></aside>}
+      {preview&&<aside className="reading-preview-note"><span>{previewCopy[language].label} · Riyadh IslamEnc</span><a href={import.meta.env.BASE_URL}>{previewCopy[language].back} <ArrowUpRight size={12}/></a></aside>}
       <div className="reading-intro"><span className="reading-eyebrow">{text.eyebrow}</span><h1>{text.title}<br/><em>{text.titleEnd}</em></h1><p>{text.subtitle}</p></div>
       <article className="daily-reading" aria-label={preview?previewCopy[language].label:text.today}>
         <div className="reading-date"><span>{preview?previewCopy[language].label:text.today}</span><i/><time dateTime={date.toISOString().slice(0,10)}>{dateLabel}</time></div>
