@@ -4,10 +4,20 @@ React 19 + TypeScript + Vite. A public daily hadith reading page with Arabic, fi
 ## Run
 `npm install` then `npm run dev`. Production: `npm run build`.
 
+## Workspace language
+
+The language button in the workspace header switches the admin interface between
+English, Indonesian, Malay, Arabic, and Urdu. The preference is saved in this
+browser under `one-sunnah-workspace-language`; English is the default. Arabic and
+Urdu put the workspace navigation on the right. Interface language is separate
+from the reader preference and the translation currently being edited. Hadith
+text, source references, and Firestore status/type values are never translated
+by this control. Run `npm run test:language` for the interface message checks.
+
 ## GitHub Pages
 
 The website is deployed to [One Sunnah on GitHub Pages](https://mfirmansyahidris.github.io/onesunnah-web/).
-The workflow in `.github/workflows/pages.yml` runs the access/content checks,
+The workflow in `.github/workflows/pages.yml` runs the access/content/language checks,
 builds the app, and publishes `dist` whenever `main` is pushed. It can also be
 started manually from the repository's Actions tab. Pages uses **GitHub Actions**
 as its publishing source.

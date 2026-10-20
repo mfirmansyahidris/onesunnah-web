@@ -34,6 +34,8 @@ jobs:
         run: npm run test:access
       - name: Check content and fallback policy
         run: npm run test:content
+      - name: Check workspace languages
+        run: npm run test:language
       - name: Build for the Pages URL
         run: npm run build -- --base="${{ steps.pages.outputs.base_path }}/"
       - name: Upload website

@@ -9,7 +9,8 @@
     "preview": "vite preview --host 127.0.0.1",
     "test:rules": "npx --yes firebase-tools emulators:exec --only firestore --project demo-one-sunnah \"node tools/test_access_rules.mjs\"",
     "test:access": "tsc src/access-flow.ts --target ES2022 --module ESNext --skipLibCheck --outDir .cache/access-flow-tests && node tools/test_access_flow.mjs",
-    "test:content": "tsc src/data.ts --target ES2022 --module ESNext --skipLibCheck --outDir .cache/content-policy-tests && node tools/test_content_policy.mjs"
+    "test:content": "tsc src/data.ts --target ES2022 --module ESNext --skipLibCheck --outDir .cache/content-policy-tests && node tools/test_content_policy.mjs",
+    "test:language": "tsc src/workspace-copy.ts --target ES2022 --module CommonJS --skipLibCheck --outDir .cache/workspace-language-tests && node tools/test_workspace_language.mjs"
   },
   "dependencies": {
     "firebase": "^11.0.0",
