@@ -1,0 +1,77 @@
+One Sunnah — Privacy Policy
+Last updated: 21 October 2026
+
+Contact: manca.fi@gmail.com
+Application: fi.dev.onesunnah (Android)
+
+Reading without an account
+One Sunnah does not require an account. You can read daily hadith, use the
+home-screen widget, and save favourites without providing your name or email.
+There are no advertisements or in-app purchases in this version.
+
+Data stored on your device
+The downloaded hadith collection, favourites, language, daily selection, widget
+preferences, notification preference, and diagnostics preference are stored on
+your device. Favourites and reading text are not uploaded as a personal library.
+Clearing app storage or uninstalling removes this local data. The app disables
+Android cloud backup for its data.
+
+Cloud content and notifications
+Google Cloud Firestore supplies published content. Requests expose connection
+information, such as an IP address and technical request metadata, to the service
+provider. Internet access is needed for the first download and later updates.
+When you enable notifications, Firebase Cloud Messaging uses an app installation
+identifier, a registration token, app/device metadata, and topic membership to
+deliver reminders. You can turn notifications off in Settings; the app then
+unsubscribes and requests deletion of its messaging token. Delivery depends on
+Android, connectivity, and the service sending reminders.
+
+Optional diagnostics in version 1.0.0 and later
+Analytics, crash-report transmission, and performance reporting are off by
+default. If you enable diagnostics in Settings, Google Analytics for Firebase,
+Firebase Crashlytics, and Firebase Performance Monitoring can process app
+interactions, installation/session identifiers, crash logs, device/app details,
+timing and network-performance measurements. Connection data may be used to
+derive coarse country/region information. We do not request location permission
+or GPS coordinates. These data help measure usage and fix reliability problems.
+Custom analytics events do not include hadith text, your name, or your email.
+Advertising identifier collection and advertising-personalisation consent are
+disabled in version 1.0.0 and later, including when diagnostics are enabled.
+
+Earlier internal-test versions
+Versions before 1.0.0 initialise Firebase Analytics, Crashlytics, and Performance
+Monitoring automatically and do not include the diagnostics switch described
+above. Those SDKs may collect the corresponding usage, diagnostic, installation,
+device, network, approximate-location and advertising-identifier data under their
+default settings. This distinction applies to internal-test version 0.6.4.
+
+Controls and retention
+In version 1.0.0 and later, turning diagnostics off stops subsequent diagnostic
+transmission, resets local Analytics data, and requests removal of unsent crash
+reports. Turning a feature off does not automatically erase records already
+received by a provider. Previously transmitted data remain subject to the
+retention settings and deletion capabilities of the relevant Firebase/Analytics
+service. No fixed retention period is claimed here. For a privacy or deletion
+request, email manca.fi@gmail.com; do not post personal information publicly.
+We may need relevant technical identifiers to locate records because the Android
+app has no user accounts. Clearing local storage does not erase provider records.
+
+Providers, sharing and security
+Firebase/Google provides content hosting, messaging, analytics and diagnostics.
+Data are transmitted over HTTPS. We do not sell personal data. Service providers
+may process data outside your country, including through their subprocessors,
+according to their applicable terms. We have not implemented independent
+end-to-end encryption or obtained an independent security certification.
+Google privacy information: https://policies.google.com/privacy
+Firebase privacy information: https://firebase.google.com/support/privacy
+
+External links and sharing
+Opening a source sends you to that publisher in your browser, where its own
+privacy policy applies. Sharing a hadith uses the app you choose through Android;
+you control the recipient and the text being shared.
+
+Children and changes
+One Sunnah does not offer a child account or knowingly request personal details
+from children. If you believe a child has provided personal information, contact
+the email above. Changes to this policy will carry a new date and will be made
+available with the app and its published privacy-policy page.
