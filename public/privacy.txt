@@ -28,7 +28,13 @@ Android, connectivity, and the service sending reminders.
 
 Optional diagnostics in version 1.0.0 and later
 Analytics, crash-report transmission, and performance reporting are off by
-default. If you enable diagnostics in Settings, Google Analytics for Firebase,
+default. Starting with version 1.0.0 (build 15), optional diagnostics require a
+neutral, local age-group check and a fresh opt-in by a user aged 18 or older.
+The selected age group is not sent to a server; only the adult diagnostics
+consent is retained on the device. Younger or unknown-age readers cannot enable
+diagnostics and can continue reading without it. A previous diagnostics setting
+without this adult check does not enable collection in build 15.
+If you enable diagnostics in Settings, Google Analytics for Firebase,
 Firebase Crashlytics, and Firebase Performance Monitoring can process app
 interactions, installation/session identifiers, crash logs, device/app details,
 timing and network-performance measurements. Connection data may be used to
