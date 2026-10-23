@@ -1,4 +1,17 @@
 # One Sunnah Content Studio
+
+**A multilingual reading experience and a protected editorial workspace.**
+
+[Live demo](https://mfirmansyahidris.github.io/onesunnah-web/) · [Developer portfolio](https://mfirmansyahidris.github.io/portfolio/)
+
+| Built with | Engineering highlights |
+| --- | --- |
+| React 19, TypeScript, Vite, Firebase | Role-based access, publication validation, five-language interface, right-to-left layouts, automated checks and GitHub Pages deployment |
+
+Visitors can read published content without signing in. Approved editors manage drafts and publishing; owners review access requests. The sections below document setup, access rules, and current content limitations.
+
+---
+
 React 19 + TypeScript + Vite. A public daily hadith reading page with Arabic, five-language translations and explanations, plus a Google-protected content studio with editing, source references, publication validation, JSON import/export, and resizable widget previews.
 
 ## Run
