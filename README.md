@@ -10,6 +10,46 @@
 
 Visitors can read published content without signing in. Approved editors manage drafts and publishing; owners review access requests. The sections below document setup, access rules, and current content limitations.
 
+## Screenshots & short walkthrough
+
+Public-reader screenshots captured from the deployed website on October 23, 2026.
+
+<p align="center">
+  <a href="docs/portfolio/01-reader-en.jpg"><img src="docs/portfolio/01-reader-en.jpg" width="48%" alt="English reader screenshot" /></a>
+  <a href="docs/portfolio/02-reader-id.jpg"><img src="docs/portfolio/02-reader-id.jpg" width="48%" alt="Indonesian reader screenshot" /></a>
+  <a href="docs/portfolio/03-reader-ar.jpg"><img src="docs/portfolio/03-reader-ar.jpg" width="48%" alt="Arabic RTL reader screenshot" /></a>
+  <a href="docs/portfolio/04-source-ar.jpg"><img src="docs/portfolio/04-source-ar.jpg" width="48%" alt="Arabic explanation and source screenshot" /></a>
+</p>
+
+**32-second screen walkthrough:** English reader → Indonesian reader → Arabic RTL reader → Arabic explanation and source. Each screen is shown for eight seconds. This is a sequence of real screenshots, not a continuous interaction recording or an authenticated-editor demonstration.
+
+[Open the MP4 walkthrough](docs/portfolio/walkthrough.mp4)
+
+<details>
+<summary>Play the animated screen preview</summary>
+
+<img src="docs/portfolio/preview.gif" width="720" alt="Animated screenshot walkthrough: English reader, Indonesian reader, Arabic RTL reader, Arabic explanation and source" />
+
+</details>
+
+## Engineering case study
+
+**Problem:** make published readings available to everyone while protecting draft content, editorial changes, and access decisions.
+
+**Implementation scope:** a public React reader, multilingual and RTL presentation, a protected editorial workspace, publication policy, Firestore access rules, and automated deployment checks.
+
+| Decision | Why it matters | Evidence |
+| --- | --- | --- |
+| Separate public reading from editorial access | Signing in alone must not grant access to drafts or management tools. | [Access-flow checks](tools/test_access_flow.mjs), [Firestore rules](firestore.rules) |
+| Enforce roles in database rules | Editors manage content; owners review access. The backend boundary must reject self-approval and privilege escalation. | [Rules](firestore.rules), [rules test suite](tools/test_access_rules.mjs) |
+| Publish only reviewed records with source references | Drafts and incomplete publication decisions stay out of the public reader. | [Content-policy checks](tools/test_content_policy.mjs), [content selection notes](data/releases/vocalized-starter-v1/README.md) |
+| Preserve missing-language fallbacks and RTL layouts | A language switch must not silently invent a translation or detach text from its source. | [Language checks](tools/test_workspace_language.mjs), [workspace language](#workspace-language) |
+| Run checks before deployment | Access, content and language checks accompany the production build. | [Package scripts](package.json), [deployment workflow](.github/workflows/pages.yml) |
+
+**Review path:** open the live reader, switch between English and Indonesian, then try Arabic to inspect RTL layout. Source links remain visible alongside the reading. The screenshots below show only the public reader; no private editor account or draft data is exposed.
+
+**Validation limits:** the repository includes access/content/language checks and a Firestore-emulator rules suite. This portfolio update verified the public UI and language switching; it did not rerun the full application test suite. Historical content counts later in this README should be read with their dates.
+
 ---
 
 React 19 + TypeScript + Vite. A public daily hadith reading page with Arabic, five-language translations and explanations, plus a Google-protected content studio with editing, source references, publication validation, JSON import/export, and resizable widget previews.
